@@ -75,9 +75,11 @@ final class HeaderValue
             $ord = ord($value[$i]);
 
             // bare LF means we aren't valid
-            if ($ord === 10 || $ord > 127) {
-                return false;
-            }
+//OGN On assouplit le contrôle des caractères ASCII visibles car des mails comportent des entetes non conformes à la RFC 822.
+//OGN Ex: « content-type: attachment;file='tété.pdf' »
+//OGN            if ($ord === 10 || $ord > 127) {
+//OGN                return false;
+//OGN            }
 
             if ($ord === 13) {
                 if ($i + 2 >= $total) {
