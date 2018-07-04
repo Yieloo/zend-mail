@@ -212,7 +212,20 @@ abstract class AbstractProtocol
             },
             E_WARNING
         );
-        $this->socket = stream_socket_client($remote, $errorNum, $errorStr, self::TIMEOUT_CONNECTION);
+        
+        if( strlen( getGlobal( 'inactivate_check_tls_smtp')) > 0 && getGlobal( 'inactivate_check_tls_smtp') === true){ // Tickets #5978 et #6148 
+          $contextOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+          );
+          $context = stream_context_create($contextOptions);
+          $this->socket = stream_socket_client($remote, $errorNum, $errorStr, self::TIMEOUT_CONNECTION, STREAM_CLIENT_CONNECT, $context);
+        }else{ // cas par défaut
+          $this->socket = stream_socket_client($remote, $errorNum, $errorStr, self::TIMEOUT_CONNECTION);
+        }
         restore_error_handler();
 
         if ($this->socket === false) {
