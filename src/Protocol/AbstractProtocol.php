@@ -213,7 +213,7 @@ abstract class AbstractProtocol
             E_WARNING
         );
         
-        if( strlen( getGlobal( 'inactivate_check_tls_smtp')) > 0 && getGlobal( 'inactivate_check_tls_smtp') === true){ // Tickets #5978 et #6148 
+        if( strlen( getGlobal( 'inactivate_check_tls_smtp'), null) <> null && getGlobal( 'inactivate_check_tls_smtp') == true){ // Tickets #5978 et #6148 
           $contextOptions = array(
             'ssl' => array(
                 'verify_peer' => false,
